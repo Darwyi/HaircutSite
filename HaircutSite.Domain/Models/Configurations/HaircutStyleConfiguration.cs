@@ -1,9 +1,9 @@
 ﻿using HaircutSite.Domain.Entities;
-using HaircutSite.WebUI.Models;
+using HaircutSite.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace HaircutSite.WebUI.Context.Configurations
+namespace HaircutSite.Domain.Context.Configurations
 {
     public class HaircutStyleConfiguration : IEntityTypeConfiguration<HaircutStyles>
     {
@@ -14,12 +14,7 @@ namespace HaircutSite.WebUI.Context.Configurations
             builder.Property(n => n.Name).HasColumnName("Name").HasMaxLength(100);
             builder.Property(d => d.Description).HasColumnName("Description").HasMaxLength(100);
 
-            builder.HasData(HaircutStyle.All.Select(h => new HaircutStyles
-            {
-                Id = h.Id,
-                Name = h.Name,
-                Description = h.Description
-            }));
+            builder.HasData(HaircutStyle.All.Select(h => new HaircutStyles { Id = h.Id, Name = h.Name, Description = h.Description}));
         }
     }
 }

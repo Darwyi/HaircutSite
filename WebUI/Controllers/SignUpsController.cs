@@ -1,4 +1,4 @@
-﻿using HaircutSite.WebUI.Models;
+﻿using HaircutSite.Domain.Models;
 using HaircutSite.Infrastructure.Context;
 using Microsoft.AspNetCore.Mvc;
 
