@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HaircutSite.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20250424062129_initial")]
-    partial class initial
+    [Migration("20250424070735_iinitial")]
+    partial class iinitial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,9 +22,9 @@ namespace HaircutSite.Infrastructure.Migrations
 
             modelBuilder.Entity("HaircutSite.Domain.Models.HaircutStyles", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("TEXT")
                         .HasColumnName("Id");
 
                     b.Property<string>("Description")
@@ -42,41 +42,26 @@ namespace HaircutSite.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Hair Styles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "empty",
-                            Name = "Long"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "empty",
-                            Name = "Short"
-                        });
                 });
 
             modelBuilder.Entity("HaircutSite.Domain.Models.SignUps", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("TEXT")
                         .HasColumnName("Id");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT")
                         .HasColumnName("Date");
 
-                    b.Property<string>("User")
-                        .IsRequired()
+                    b.Property<Guid>("UserId")
                         .HasColumnType("TEXT")
-                        .HasColumnName("UserName");
+                        .HasColumnName("UserId");
 
-                    b.Property<int>("haircutStyle")
+                    b.Property<Guid>("haircutStyleId")
                         .HasMaxLength(100)
-                        .HasColumnType("INTEGER")
+                        .HasColumnType("TEXT")
                         .HasColumnName("Haircut StyleId");
 
                     b.HasKey("Id");

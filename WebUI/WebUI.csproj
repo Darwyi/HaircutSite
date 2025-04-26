@@ -7,11 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\HaircutSite.Application\HaircutSite.Application.csproj" />
+    <ProjectReference Include="..\HaircutSite.Domain\HaircutSite.Domain.csproj" />
     <ProjectReference Include="..\HaircutSite.Infrastructure\HaircutSite.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

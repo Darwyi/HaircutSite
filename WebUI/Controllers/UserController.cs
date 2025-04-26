@@ -1,7 +1,7 @@
-﻿using CSharpFunctionalExtensions;
+﻿using HaircutSite.Application.Interfaces;
 using HaircutSite.Domain.Models;
-using HaircutSite.Infrastructure.Context;
 using Microsoft.AspNetCore.Mvc;
+using WebUI.ViewModel;
 
 namespace HaircutSite.WEBUI.Controllers
 {
@@ -9,58 +9,55 @@ namespace HaircutSite.WEBUI.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly ApplicationContext _dbContext;
+        private readonly IUserService _user;
 
-        public UserController(ApplicationContext dbContext)
+        public UserController(IUserService user)
         {
-            _dbContext = dbContext;
+            _user = user;
         }
 
         [HttpGet]
-        public List<User> GetAllUsers()
+        public async Task<IActionResult> GetAllUsers()
         {
-            return _dbContext.Set<User>().ToList();
+            return Ok(await _user.GetUsers());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUserUpById(Guid id)
+        public async Task<IActionResult> GetUserUpById(Guid id)
         {
-            var user = await _dbContext.Users.FindAsync(id);
-            if (user is null)
-            {
-                return BadRequest("User not found");
-            }
+            if (_user.GetUserById(id) is null) return BadRequest("User is not found");
 
-            return Ok(user);
+            return Ok(await _user.GetUserById(id));
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<User>> UpdateUserUp(Guid id, string Name, string password)
+        [HttpGet("{id}/appointments")]
+        public async Task<IActionResult> GetUserAppointments(Guid id)
         {
-            var user = await _dbContext.Users.FindAsync(id);
-            if (user is null)
-            {
-                return BadRequest("User is not found");
-            }
-            user.Name = Name;
-            user.Password = password;
-            user.UpdatedAt = DateTime.Now;
+            if (_user.GetUserAppointments(id) is null) return BadRequest("User is not found");
 
-            await _dbContext.SaveChangesAsync();
-
-            return Ok(user);
+            return Ok(await _user.GetUserAppointments(id));
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<User>> RegisterUser(
-            User user)
+        public async Task<IActionResult> RegisterUser(UserViewModel userVM)
         {
-            _dbContext.Users.Add(user);
+            var newUser = userVM.ToUser();
 
-            var entries = _dbContext.ChangeTracker.Entries();
+            await _user.RegisterUser(newUser);
+            return Ok(newUser);
+        }
 
-            await _dbContext.SaveChangesAsync();
-            return Ok(User);
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(Guid id, User user)
+        {
+            var userId = await _user.GetUserById(id);
+            if (userId is null) return BadRequest("User is not found");
+
+            var newUser = _user.UpdateUser(id, user);
+
+            await newUser;
+
+            return Ok(newUser);
         }
     }
 }

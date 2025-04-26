@@ -7,12 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HaircutSite.Application\HaircutSite.Application.csproj" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
-    <Folder Include="Repository\" />
+    <ProjectReference Include="..\HaircutSite.Domain\HaircutSite.Domain.csproj" />
   </ItemGroup>
 
 </Project>

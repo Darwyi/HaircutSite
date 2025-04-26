@@ -1,6 +1,5 @@
-﻿using HaircutSite.Domain.Context.Configurations;
-using HaircutSite.Domain.Models;
-using HaircutSite.Domain.Models.Configurations;
+﻿using HaircutSite.Domain.Models;
+using HaircutSite.Infrastructure.Configurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -18,10 +17,10 @@ namespace HaircutSite.Infrastructure.Context
 
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<HaircutStyles> HairCutStyles { get; set; } = null!;
-        public DbSet<SignUps> SignUps { get; set; } = null!;
+        public DbSet<Appointment> Appointments { get; set; } = null!;
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new SignUpsConfiguration());
+            modelBuilder.ApplyConfiguration(new AppointmentConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new HaircutStyleConfiguration());
         }
