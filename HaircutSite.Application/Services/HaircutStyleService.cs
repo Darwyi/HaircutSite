@@ -29,7 +29,13 @@ namespace HaircutSite.Application.Services
 
         public async Task<HaircutStyles> GetHaircutStyleById(Guid id)
         {
-            return await _haircutStyleRepository.GetHaircutStyleById(id);
+            var hSId = await _haircutStyleRepository.GetHaircutStyleById(id);
+            if (hSId == null)
+            {
+                throw new Exception("Style doesn't exists");
+            }
+
+            return hSId;
         }
 
         public async Task<List<HaircutStyles>> GetHaircutStyles()

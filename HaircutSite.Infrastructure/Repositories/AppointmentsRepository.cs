@@ -77,28 +77,56 @@ namespace HaircutSite.Infrastructure.Repositories
 
         public async Task<Appointment> GetAppointmentByTime(DateTime dateTime)
         {
-            var appointment = await _dbContext.Appointments
-    .FirstOrDefaultAsync(d => d.Date == dateTime);
+            //var appointmentDate = await _dbContext.Appointments.FirstOrDefaultAsync(d =>
+            //d.Date == dateTime);
 
-            if (appointment == null)
-                return null;
+            //if (appointmentDate == null) return null;
 
-            var haircutStyleId = appointment.haircutStyleId;
+            //var hSId = appointmentDate.haircutStyleId;
 
-            var haircutStyle = await _dbContext.HairCutStyles
-                .FirstOrDefaultAsync(h => h.Id == haircutStyleId);
+            //var serviceidreturn = await _haircutStyleRepository.GetHaircutStyleById(hSId);
 
-            if (haircutStyle == null)
-                return null;
+            //var serviceDuration = serviceidreturn.Duration;
 
-            var appointmentEnd = appointment.Date + haircutStyle.Duration;
+            //var appoinmentEnds = appointmentDate.Date + serviceDuration;
 
-            if (dateTime >= appointment.Date && dateTime <= appointmentEnd)
+            foreach (var appointment in _dbContext.Appointments)
             {
-                return appointment;
-            }
+                var existingHSId = appointment.haircutStyleId;
 
+                var existingServiceIdReturn = await _haircutStyleRepository.GetHaircutStyleById(existingHSId);
+
+                var existingServiceDuration = existingServiceIdReturn.Duration;
+
+                var existingAppoinmentEnds = appointment.Date + existingServiceDuration;
+
+                if (dateTime <= existingAppoinmentEnds && dateTime >= appointment.Date)
+                {
+                    return appointment;
+                }
+            //if (dateTime >= appointmentDate.Date && appoinmentEnds >= dateTime)
+            //{
+            //    return appointmentDate;
+            //}
+            }
             return null;
+
+            //var appointment = await _dbContext.Appointments.FirstOrDefaultAsync(d => d.Date == dateTime);
+
+            //var haircutStyleId = _haircutStyleRepository.GetHaircutStyleById(appointment.haircutStyleId);
+
+            //var haircutStyle = await _dbContext.HairCutStyles
+            //    .FirstOrDefaultAsync(h => h.Id == haircutStyleId.Result.Id);
+
+            //var appointmentEnd = appointment.Date + haircutStyle.Duration;
+
+            //if (dateTime >= appointment.Date && dateTime <= appointmentEnd)
+            //{
+            //    return appointment;
+            //}
+            //if (appointment == null && haircutStyle == null) return null;
+
+            //return null;
 
 
             //return await _dbContext.Appointments.FirstOrDefaultAsync(d =>

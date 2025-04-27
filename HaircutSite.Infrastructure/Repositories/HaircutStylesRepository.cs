@@ -18,9 +18,13 @@ namespace HaircutSite.Infrastructure.Repositories
             return await _dbContext.Set<HaircutStyles>().ToListAsync();
         }
 
-        public async Task<HaircutStyles> GetHaircutStyleById(Guid id)
+        public async Task<HaircutStyles?> GetHaircutStyleById(Guid id)
         {
             var haircutStyle = await _dbContext.Set<HaircutStyles>().FindAsync(id);
+            if (haircutStyle == null)
+            {
+                throw new Exception("Style doesn't exists");
+            }
 
             return haircutStyle;
         }

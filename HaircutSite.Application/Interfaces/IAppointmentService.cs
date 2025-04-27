@@ -8,7 +8,7 @@ namespace HaircutSite.Application.Interfaces
         Task<List<Appointment>> GetAppointmentByDate(DateTime time);
         Task<Appointment> GetAppointmentByTime(DateTime dateTime);
         Task<Appointment> GetAppointmentById(Guid id);
-        Task CreateAppointment(Appointment appointment, DateTime time);
+        Task CreateAppointment(Appointment appointment);
         Task UpdateAppointment(Guid id, Appointment appointment);
     }
 }

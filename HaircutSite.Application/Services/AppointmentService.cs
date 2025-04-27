@@ -26,13 +26,16 @@ namespace HaircutSite.Application.Services
 
 
 
-        public async Task CreateAppointment(Appointment appointment, DateTime time)
+        public async Task CreateAppointment(Appointment appointment)
         {
-            if (await GetAppointmentByTime(time) != null)
+            if (await GetAppointmentByTime(appointment.Date) != null)
             {
                 throw new Exception("Appointment already in use");
-            } 
+            }
+            else
+            {
                 await _appointmentRepository.CreateAppointment(appointment);
+            }
         }
 
 

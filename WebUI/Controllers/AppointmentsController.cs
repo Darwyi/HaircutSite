@@ -41,22 +41,22 @@ namespace HaircutSite.Core.Controllers
         [HttpGet("/getAppointmentByTime")]
         public async Task<IActionResult> GetAppointmentByTime(DateTime time)
         {
-        try
-        {
-            if (_appointmentService.GetAppointmentByTime(time) is null) return BadRequest("Appointment not found");
-            return Ok(await _appointmentService.GetAppointmentByTime(time));
-        } catch (Exception e)
-        {
-            return BadRequest(e.Message);
-    }
-}
+            try
+            {
+                if (_appointmentService.GetAppointmentByTime(time) is null) return BadRequest("Appointment not found");
+                return Ok(await _appointmentService.GetAppointmentByTime(time));
+            } catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 
-        [HttpPost("Appointment")]
-        public async Task<IActionResult> CreateAppointment(Guid hcsId, AppointmentViewModel appointmentVM, DateTime time)
+        [HttpPost("CreateAppointment")]
+        public async Task<IActionResult> CreateAppointment([FromForm] AppointmentViewModel appointmentVM)
         {
             try
             {
-                await _appointmentService.CreateAppointment(appointmentVM.ToAppointment(), time);
+                await _appointmentService.CreateAppointment(appointmentVM.ToAppointment());
                 return Ok("Appointment created");
             } catch (Exception e)
             {
