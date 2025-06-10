@@ -9,5 +9,6 @@ namespace HaircutSite.Domain.Interfaces
         Task UpdateUser(Guid id, User user);
         Task RegisterUser(User user);
         Task<List<Appointment>?> GetUserAppointments(Guid id);
+        Task<User> GetUserByName(string name);
     }
 }

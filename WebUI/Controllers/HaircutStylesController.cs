@@ -1,8 +1,6 @@
-﻿using HaircutSite.Application.Interfaces;
-using HaircutSite.Application.Services;
+﻿using HaircutSite.Application.Interfaces.Services;
 using HaircutSite.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using WebUI.ViewModel;
 
 namespace WebUI.Controllers
@@ -26,6 +24,8 @@ namespace WebUI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetHaircutById(Guid Id)
         {
+            
+
             var haircut = await _haircutStyleService.GetHaircutStyleById(Id);
             if (haircut is null)
             {
@@ -38,28 +38,31 @@ namespace WebUI.Controllers
         [HttpPost("/CreateNewHaircut")]
         public async Task<IActionResult> CreateHaircut(HaircutStylesViewModel haircutStylesVM)
         {
-            try
-            {
-                var newHaircut = haircutStylesVM.ToStyle();
-                await _haircutStyleService.CreateHaircutStyle(newHaircut);
-                return Ok(newHaircut);
-            } catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+                try
+                {
+                    var newHaircut = haircutStylesVM.ToStyle();
+                    await _haircutStyleService.CreateHaircutStyle(newHaircut);
+                    return Ok(newHaircut);
+                }
+                catch (Exception e)
+                {
+                    return BadRequest(e.Message);
+                }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateStyle(Guid id, HaircutStyles haircutStyles)
         {
-            var haircut = await _haircutStyleService.GetHaircutStyleById(id);
-            if (haircut is null)
+            try
             {
-                return BadRequest("Haircut not found");
-            }
+                var haircut = await _haircutStyleService.GetHaircutStyleById(id);
 
-            var newHaircutStyle = _haircutStyleService.UpdateHaircutStyle(id, haircutStyles);
-            return Ok(newHaircutStyle);
+                var newHaircutStyle = _haircutStyleService.UpdateHaircutStyle(id, haircutStyles);
+                return Ok(newHaircutStyle);
+            } catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

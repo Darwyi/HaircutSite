@@ -20,9 +20,7 @@ namespace HaircutSite.Infrastructure.Repositories
 
         public async Task<User> GetUserById(Guid id)
         {
-            var user = await _dbContext.Users.FindAsync(id);
-
-            return user;
+            return await _dbContext.Users.FindAsync(id);
         }
 
         public async Task RegisterUser(User user)
@@ -33,22 +31,30 @@ namespace HaircutSite.Infrastructure.Repositories
 
         public async Task UpdateUser(Guid id, User user)
         {
-            var trackedEntity = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
-
             user.Id = id;
-            
-            _dbContext.Users.Update(user);
-            
+            _dbContext.Users.Remove(GetUserById(id).Result);
+            await _dbContext.SaveChangesAsync();
+
+            await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
         }
        
- public async Task<List<Appointment>?> GetUserAppointments(Guid id)
+        public async Task<List<Appointment>> GetUserAppointments(Guid id)
         {
             var appointments = await _dbContext.Appointments
                 .Where(a => a.UserId == id)
                 .ToListAsync();
 
             return appointments;
+        }
+
+        public async Task<User> GetUserByName(User user)
+        {
+            var trackedUser = await _dbContext.Users
+                .Where(u => u.Name == user.Name)
+                .FirstOrDefaultAsync();
+
+            return trackedUser;
         }
     }
 }

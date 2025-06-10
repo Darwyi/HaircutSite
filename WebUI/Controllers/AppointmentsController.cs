@@ -1,4 +1,4 @@
-﻿using HaircutSite.Application.Interfaces;
+﻿using HaircutSite.Application.Interfaces.Services;
 using HaircutSite.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.ViewModel;
@@ -16,26 +16,44 @@ namespace HaircutSite.Core.Controllers
             _appointmentService = appointmentService;
         }
 
-        [HttpGet]
+        [HttpGet("/appointments")]
         public async Task<IActionResult> GetAllAppointments()
         {
-            return Ok(await _appointmentService.GetAllAppointments());
+            try
+            {
+                return Ok(await _appointmentService.GetAllAppointments());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAppointmentById(Guid id)
-        {//TODO: сделать try
-            if (_appointmentService.GetAppointmentById(id) is null) return BadRequest("Appointment not found");
+        {
+            try
+            {
+                return Ok(await _appointmentService.GetAppointmentById(id));
+            } catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
 
-            return Ok(_appointmentService.GetAppointmentById(id));
         }
 
-        [HttpGet("/{time}")]
+        [HttpGet("/appointments/{time}")]
         public async Task<IActionResult> GetAppointmentByDate(DateTime time)
         {
-            if (_appointmentService.GetAppointmentByDate(time) is null) return BadRequest("Appointment not found");
+            try
+            {
+                if (_appointmentService.GetAppointmentByDate(time) is null) return BadRequest("Appointment not found");
 
-            return Ok(await _appointmentService.GetAppointmentByDate(time));
+                return Ok(await _appointmentService.GetAppointmentByDate(time));
+            } catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpGet("/getAppointmentByTime")]
@@ -51,7 +69,7 @@ namespace HaircutSite.Core.Controllers
             }
         }
 
-        [HttpPost("CreateAppointment")]
+        [HttpPost("/appointments{appointmentVM}")]
         public async Task<IActionResult> CreateAppointment([FromForm] AppointmentViewModel appointmentVM)
         {
             try
@@ -64,11 +82,29 @@ namespace HaircutSite.Core.Controllers
             }
         }
 
-        [HttpPut("SignUp/{id}")]
-        public async Task<IActionResult> UpdateAppointment(Guid id, Appointment appointment)
+        [HttpPut("appointments")]
+        public async Task<IActionResult> UpdateAppointment([FromForm]Appointment appointment)
         {
-            await _appointmentService.UpdateAppointment(id, appointment);
-            return Ok("Appointment updated");
+            try
+            {
+                await _appointmentService.UpdateAppointment(appointment);
+                return Ok("Appointment updated");
+            } catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        [HttpDelete(" /appointments/{id}")]
+        public async Task<IActionResult> DeleteAppointment(Guid id)
+        {
+            try
+            {
+                await  _appointmentService.DeleteAppointment(id);
+                return Ok("Appointment deleted");
+            } catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

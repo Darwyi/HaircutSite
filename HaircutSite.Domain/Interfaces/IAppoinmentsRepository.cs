@@ -9,7 +9,7 @@ namespace HaircutSite.Domain.Interfaces
         Task<Appointment> GetAppointmentById(Guid id);
         Task<Appointment> GetAppointmentByTime(DateTime date);
         Task CreateAppointment(Appointment appointment);
-        Task UpdateAppointment(Guid id, Appointment appointment);
+        Task UpdateAppointment(Appointment appointment);
         Task DeleteAppointment(Guid id);
     }
 }

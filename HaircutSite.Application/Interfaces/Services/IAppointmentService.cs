@@ -1,6 +1,6 @@
 ﻿using HaircutSite.Domain.Models;
 
-namespace HaircutSite.Application.Interfaces
+namespace HaircutSite.Application.Interfaces.Services
 {
     public interface IAppointmentService
     {
@@ -9,6 +9,7 @@ namespace HaircutSite.Application.Interfaces
         Task<Appointment> GetAppointmentByTime(DateTime dateTime);
         Task<Appointment> GetAppointmentById(Guid id);
         Task CreateAppointment(Appointment appointment);
-        Task UpdateAppointment(Guid id, Appointment appointment);
+        Task UpdateAppointment(Appointment appointment);
+        Task DeleteAppointment(Guid id);
     }
 }

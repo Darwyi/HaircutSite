@@ -2,6 +2,9 @@
 using HaircutSite.Domain.Models;
 using HaircutSite.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.SqlServer.Server;
+using Mono.TextTemplating;
+using System.ComponentModel.DataAnnotations;
 
 namespace HaircutSite.Infrastructure.Repositories
 {
@@ -20,24 +23,17 @@ namespace HaircutSite.Infrastructure.Repositories
 
         public async Task<HaircutStyles?> GetHaircutStyleById(Guid id)
         {
-            var haircutStyle = await _dbContext.Set<HaircutStyles>().FindAsync(id);
-            if (haircutStyle == null)
-            {
-                throw new Exception("Style doesn't exists");
-            }
-
-            return haircutStyle;
+            return await _dbContext.Set<HaircutStyles>().FindAsync(id);
         }
         public async Task CreateHaircutStyle(HaircutStyles haircutStyles)
-        {   
+        {
             await _dbContext.HairCutStyles.AddAsync(haircutStyles);
             await _dbContext.SaveChangesAsync();
         }
 
         public async Task UpdateHaircutStyle(Guid id, HaircutStyles haircutStyles)
         {
-            HaircutStyles? haircutStyle = await _dbContext.HairCutStyles.FindAsync(id);
-            if (haircutStyle is null) return;
+            var haircutStyle = await GetHaircutStyleById(id);
             haircutStyles.Id = id;
 
             _dbContext.HairCutStyles.Remove(haircutStyle);

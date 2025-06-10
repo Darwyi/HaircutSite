@@ -1,5 +1,7 @@
-﻿using HaircutSite.Application.Interfaces;
+﻿using HaircutSite.Application.Interfaces.Services;
+using HaircutSite.Application.Services;
 using HaircutSite.Domain.Models;
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.ViewModel;
 
@@ -9,55 +11,113 @@ namespace HaircutSite.WEBUI.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IUserService _user;
+        private readonly IUserService _userService;
 
-        public UserController(IUserService user)
+        public UserController(IUserService userService)
         {
-            _user = user;
+            _userService = userService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
-            return Ok(await _user.GetUsers());
+            try
+            {
+                return Ok(await _userService.GetUsers());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserUpById(Guid id)
         {
-            if (_user.GetUserById(id) is null) return BadRequest("User is not found");
+            if (_userService.GetUserById(id) is null) return BadRequest("User is not found");
 
-            return Ok(await _user.GetUserById(id));
+            return Ok(await _userService.GetUserById(id));
         }
 
         [HttpGet("{id}/appointments")]
         public async Task<IActionResult> GetUserAppointments(Guid id)
         {
-            if (_user.GetUserAppointments(id) is null) return BadRequest("User is not found");
+            try
+            {
+                if (_userService.GetUserAppointments(id) is null) return BadRequest("User is not found");
 
-            return Ok(await _user.GetUserAppointments(id));
+                return Ok(await _userService.GetUserAppointments(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser(UserViewModel userVM)
         {
-            var newUser = userVM.ToUser();
+            try
+            {
+                var newUser = userVM.ToUser();
 
-            await _user.RegisterUser(newUser);
-            return Ok(newUser);
+                await _userService.RegisterUser(newUser);
+                return Ok(newUser);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        public async Task<IActionResult> Login(UserViewModel userVM, UserService userService)
+        {
+            try
+            {
+                var user = userVM.ToUser();
+                var token = await userService.Login(user);
+                if (token is null) return BadRequest("Invalid credentials");
+                return Ok(token);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(Guid id, User user)
         {
-            var userId = await _user.GetUserById(id);
-            if (userId is null) return BadRequest("User is not found");
+            try
+            {
+                var userId = await _userService.GetUserById(id);
+                if (userId is null) return BadRequest("User is not found");
 
-            var newUser = _user.UpdateUser(id, user);
+                var newUser = _userService.UpdateUser(id, user);
 
-            await newUser;
+                await newUser;
 
-            return Ok(newUser);
+                return Ok(newUser);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("{name}")]
+        public async Task<User> GetUserByName(string name)
+        {
+            try
+            {
+                var trackedUser = await _userService.GetUserByName(name);
+                if (trackedUser is null) throw new Exception("User not found");
+                return trackedUser;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

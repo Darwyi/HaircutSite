@@ -6,6 +6,7 @@
         public Guid UserId { get; set; }
         public Guid haircutStyleId { get; set; }
         public DateTime Date { get; set; }
+        public string? Additional { get; set; }
 
         public Appointment()
         {

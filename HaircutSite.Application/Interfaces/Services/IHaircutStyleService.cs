@@ -1,6 +1,6 @@
 ﻿using HaircutSite.Domain.Models;
 
-namespace HaircutSite.Application.Interfaces
+namespace HaircutSite.Application.Interfaces.Services
 {
     public interface IHaircutStyleService
     {

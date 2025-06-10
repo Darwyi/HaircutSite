@@ -1,6 +1,6 @@
 ﻿using HaircutSite.Domain.Models;
 
-namespace HaircutSite.Application.Interfaces
+namespace HaircutSite.Application.Interfaces.Services
 {
     public interface IUserService
     {
@@ -9,6 +9,6 @@ namespace HaircutSite.Application.Interfaces
         Task UpdateUser(Guid id, User user);
         Task RegisterUser(User user);
         Task<List<Appointment>?> GetUserAppointments(Guid id);
-
+        Task<User> GetUserByName(string name);
     }
 }
