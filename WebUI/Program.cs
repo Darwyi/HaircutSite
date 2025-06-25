@@ -5,32 +5,44 @@ using HaircutSite.Infrastructure.Repositories;
 using HaircutSite.Application.Interfaces.Services;
 using HaircutSite.Application.Interfaces.Auth;
 using HaircutSite.Infrastructure.Extensions;
+using WebUI.Endpoints;
+using WebUI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews();
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+var services = builder.Services;
 
-builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(JwtOptions)));
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
 
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IHaircutStyleService, HaircutStyleService>();
-builder.Services.AddScoped<IHaircutStyleRepository, HaircutStylesRepository>();
-builder.Services.AddScoped<IAppointmentService, AppointmentService>();
-builder.Services.AddScoped<IAppoinmentsRepository, AppointmentsRepository>();
-builder.Services.AddScoped<IPasswordHashRepository, PasswordHash>();
-builder.Services.AddScoped<IJwtRepository, JwtProvider>();
+services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(JwtOptions)));
 
-builder.Services.AddDbContext<ApplicationContext>();
+services.AddDbContext<ApplicationContext>();
 
+services.AddScoped<IUserService, UserService>();
+services.AddScoped<IUserRepository, UserRepository>();
+services.AddScoped<IHaircutStyleService, HaircutStyleService>();
+services.AddScoped<IHaircutStyleRepository, HaircutStylesRepository>();
+services.AddScoped<IAppointmentService, AppointmentService>();
+services.AddScoped<IAppoinmentsRepository, AppointmentsRepository>();
+
+services.AddScoped<IUserJWTService, UserJWTService>();
+services.AddScoped<IPasswordHashRepository, PasswordHash>();
+services.AddScoped<IJwtRepository, JwtProvider>();
 
 var app = builder.Build();
 
-app.MapControllers();
-app.UseSwagger();
-app.UseSwaggerUI();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.AddApiEndpoints();
 
 app.Run();

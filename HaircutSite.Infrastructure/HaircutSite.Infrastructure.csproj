@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Data\HaircutSite.db" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Migrations\" />
   </ItemGroup>
 
@@ -16,6 +20,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HaircutSite.Domain\HaircutSite.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Data\HaircutSite.db" />
   </ItemGroup>
 
 </Project>

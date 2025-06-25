@@ -39,38 +39,6 @@ public class UserService : IUserService
         return user;
     }
 
-    public async Task RegisterUser(User user)
-    {
-        var users = GetUsers();
-        if (users.Result.Find(n => n.Name == user.Name) != null)
-                throw new Exception("user already exists!");
-
-        var hashedPassword = _passwordHasher.Generate(user.Password);
-        var newUser = new User
-        {
-            Id = Guid.NewGuid(),
-            Name = user.Name,
-            Password = hashedPassword,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
-
-        await _userRepository.RegisterUser(newUser);
-    }
-
-    public async Task<string> Login(User user)
-    {
-        var userByName = await _userRepository.GetUserByName(user.Name);
-
-        var result = _passwordHasher.Verify(user.Password, userByName.Password);
-
-        if (!result) throw new Exception("Failed to login");
-
-        var token = _jwtProvider.GenerateToken(userByName);
-
-        return token;
-    }
-
     public async Task UpdateUser(Guid id, User user)
     {
         var trackedEntity = await GetUserById(id);

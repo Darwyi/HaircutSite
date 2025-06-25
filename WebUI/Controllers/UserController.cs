@@ -3,6 +3,7 @@ using HaircutSite.Application.Services;
 using HaircutSite.Domain.Models;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using WebUI.ViewModel;
 
 namespace HaircutSite.WEBUI.Controllers
@@ -54,36 +55,37 @@ namespace HaircutSite.WEBUI.Controllers
             }
         }
 
-        [HttpPost("register")]
-        public async Task<IActionResult> RegisterUser(UserViewModel userVM)
-        {
-            try
-            {
-                var newUser = userVM.ToUser();
+        //[HttpPost("register")]
+        //public async Task<IActionResult> RegisterUser(UserViewModel userVM)
+        //{
+        //    try
+        //    {
+        //        var newUser = userVM.ToUser();
 
-                await _userService.RegisterUser(newUser);
-                return Ok(newUser);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //        await _userService.RegisterUser(newUser);
+        //        return Ok(newUser);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
 
-        public async Task<IActionResult> Login(UserViewModel userVM, UserService userService)
-        {
-            try
-            {
-                var user = userVM.ToUser();
-                var token = await userService.Login(user);
-                if (token is null) return BadRequest("Invalid credentials");
-                return Ok(token);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //[HttpPost("login")]
+        //public async Task<IActionResult> Login([FromBody] UserViewModel userVM)
+        //{
+        //    try
+        //    {
+        //        var user = userVM.ToUser();
+        //        var token = _userService.Login(user).Result;
+        //        if (token is null) return BadRequest("Invalid credentials");
+        //        return Ok(token);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(Guid id, User user)

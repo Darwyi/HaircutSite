@@ -12,19 +12,5 @@ namespace WebUI.ViewModel
             Name = name;
             Password = password;
         }
-
-        public User ToUser()
-        {
-            var newUser = new User
-            {
-                Id = Guid.NewGuid(),
-                Name = Name,
-                Password = Password,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            };
-
-            return newUser;
-        }
     }
 }

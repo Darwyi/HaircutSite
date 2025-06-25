@@ -48,10 +48,10 @@ namespace HaircutSite.Infrastructure.Repositories
             return appointments;
         }
 
-        public async Task<User> GetUserByName(User user)
+        public async Task<User> GetUserByName(String username)
         {
             var trackedUser = await _dbContext.Users
-                .Where(u => u.Name == user.Name)
+                .Where(u => u.Name == username)
                 .FirstOrDefaultAsync();
 
             return trackedUser;

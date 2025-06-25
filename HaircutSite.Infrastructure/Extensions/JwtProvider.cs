@@ -18,14 +18,14 @@ namespace HaircutSite.Infrastructure.Extensions
         }
         public string GenerateToken(User user)
         {
-            Claim[] claims = [new("userId", user.Id.ToString())];
+            Claim[] claim = [new("userId", user.Id.ToString())];
 
             var signingCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey)),
                 SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                claims: claims,
+                claims: claim,
                 signingCredentials: signingCredentials,
                 expires: DateTime.UtcNow.AddHours(_options.ExpirationHours));
 
