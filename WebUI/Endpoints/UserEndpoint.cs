@@ -1,4 +1,5 @@
 ﻿using HaircutSite.Application.Services;
+using Microsoft.AspNetCore.Mvc;
 using WebUI.Contracts.User;
 
 namespace WebUI.Endpoints
@@ -14,7 +15,9 @@ namespace WebUI.Endpoints
             return app;
         }
 
-        private static async Task<IResult> Register(UserRequest request,UserJWTService userJWTService) 
+        private static async Task<IResult> Register(
+            UserRequest request, 
+            [FromServices]UserJWTService userJWTService) 
         {
             await userJWTService.RegisterUser(request.Name, request.Password);
             return Results.Ok("User registered successfully.");
@@ -22,7 +25,7 @@ namespace WebUI.Endpoints
 
         private static async Task<IResult> Login(
             UserRequest request,
-            UserJWTService userJWTService,
+            [FromServices]UserJWTService userJWTService,
             HttpContext context)
         {
             var token = await userJWTService.Login(request.Name, request.Password);

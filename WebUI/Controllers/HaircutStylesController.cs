@@ -1,5 +1,6 @@
 ﻿using HaircutSite.Application.Interfaces.Services;
 using HaircutSite.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.ViewModel;
 
@@ -14,13 +15,13 @@ namespace WebUI.Controllers
         {
             _haircutStyleService = haircutStyleService;
         }
-
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllHaircutStyles()
         {
             return Ok(await _haircutStyleService.GetHaircutStyles());
         }
-
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetHaircutById(Guid Id)
         {
@@ -34,7 +35,7 @@ namespace WebUI.Controllers
 
             return Ok(haircut);
         }
-
+        [Authorize]
         [HttpPost("/CreateNewHaircut")]
         public async Task<IActionResult> CreateHaircut(HaircutStylesViewModel haircutStylesVM)
         {
@@ -49,7 +50,7 @@ namespace WebUI.Controllers
                     return BadRequest(e.Message);
                 }
         }
-
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateStyle(Guid id, HaircutStyles haircutStyles)
         {
