@@ -1,10 +1,7 @@
 ﻿using HaircutSite.Application.Interfaces.Services;
-using HaircutSite.Application.Services;
 using HaircutSite.Domain.Models;
-using Microsoft.AspNetCore.HttpLogging;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using WebUI.ViewModel;
 
 namespace HaircutSite.WEBUI.Controllers
 {
@@ -18,7 +15,7 @@ namespace HaircutSite.WEBUI.Controllers
         {
             _userService = userService;
         }
-
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -31,7 +28,7 @@ namespace HaircutSite.WEBUI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserUpById(Guid id)
         {
@@ -39,7 +36,7 @@ namespace HaircutSite.WEBUI.Controllers
 
             return Ok(await _userService.GetUserById(id));
         }
-
+        [Authorize]
         [HttpGet("{id}/appointments")]
         public async Task<IActionResult> GetUserAppointments(Guid id)
         {
@@ -86,8 +83,8 @@ namespace HaircutSite.WEBUI.Controllers
         //        return BadRequest(ex.Message);
         //    }
         //}
-
-        [HttpPut("{id}")]
+        [Authorize]
+        [HttpPut("update/{id}")]
         public async Task<IActionResult> UpdateUser(Guid id, User user)
         {
             try
@@ -106,8 +103,8 @@ namespace HaircutSite.WEBUI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-        [HttpGet("{name}")]
+        [Authorize]
+        [HttpGet("user/{name}")]
         public async Task<User> GetUserByName(string name)
         {
             try

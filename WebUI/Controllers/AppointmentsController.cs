@@ -1,5 +1,6 @@
 ﻿using HaircutSite.Application.Interfaces.Services;
 using HaircutSite.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebUI.ViewModel;
 
@@ -16,6 +17,7 @@ namespace HaircutSite.Core.Controllers
             _appointmentService = appointmentService;
         }
 
+        [Authorize]
         [HttpGet("/appointments")]
         public async Task<IActionResult> GetAllAppointments()
         {
@@ -28,7 +30,7 @@ namespace HaircutSite.Core.Controllers
                 return BadRequest(e.Message);
             }
         }
-
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAppointmentById(Guid id)
         {
@@ -41,7 +43,7 @@ namespace HaircutSite.Core.Controllers
             }
 
         }
-
+        [Authorize]
         [HttpGet("/appointments/{time}")]
         public async Task<IActionResult> GetAppointmentByDate(DateTime time)
         {
@@ -55,7 +57,7 @@ namespace HaircutSite.Core.Controllers
                 return BadRequest(e.Message);
             }
         }
-
+        [Authorize]
         [HttpGet("/getAppointmentByTime")]
         public async Task<IActionResult> GetAppointmentByTime(DateTime time)
         {
@@ -68,7 +70,7 @@ namespace HaircutSite.Core.Controllers
                 return BadRequest(e.Message);
             }
         }
-
+        [Authorize]
         [HttpPost("/appointments{appointmentVM}")]
         public async Task<IActionResult> CreateAppointment([FromForm] AppointmentViewModel appointmentVM)
         {
@@ -81,7 +83,7 @@ namespace HaircutSite.Core.Controllers
                 return BadRequest(e.Message);
             }
         }
-
+        [Authorize]
         [HttpPut("appointments")]
         public async Task<IActionResult> UpdateAppointment([FromForm]Appointment appointment)
         {
@@ -94,6 +96,7 @@ namespace HaircutSite.Core.Controllers
                 return BadRequest(e.Message);
             }
         }
+        [Authorize]
         [HttpDelete(" /appointments/{id}")]
         public async Task<IActionResult> DeleteAppointment(Guid id)
         {

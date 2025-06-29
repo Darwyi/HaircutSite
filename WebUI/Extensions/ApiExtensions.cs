@@ -1,7 +1,5 @@
-﻿using CSharpFunctionalExtensions;
-using HaircutSite.Infrastructure.Extensions;
+﻿using HaircutSite.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebUI.Endpoints;
@@ -18,8 +16,10 @@ namespace WebUI.Extensions
 
         public static void AddApiAuthentication(
             this IServiceCollection services,
-            IOptions<JwtOptions> jwtOptions)
+            IConfiguration configuration)
         {
+            var jwtOptions = configuration.GetSection("JwtOptions").Get<JwtOptions>(); // Explicitly specify the type  
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
                 {
@@ -29,7 +29,7 @@ namespace WebUI.Extensions
                         ValidateAudience = false,
                         ValidateLifetime = true,
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Value.SecretKey))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecretKey))
                     };
 
                     options.Events = new JwtBearerEvents
@@ -40,7 +40,6 @@ namespace WebUI.Extensions
                             return Task.CompletedTask;
                         }
                     };
-
                 });
 
             services.AddAuthorization();
